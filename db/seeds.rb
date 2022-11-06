@@ -70,19 +70,19 @@ def create_shifts(service_id)
     (@starting_week_day..@ending_week_day).each do |day|
       shift_list = []
 
-      if weekend?(day.wday)
-        create_weekend_shifts(
-          Time.parse(shift_definition[:weekend][0]),
-          shift_definition[:weekend][1],
-          service_id
-        )
-      else
-        create_week_shifts(
-          Time.parse(shift_definition[:week][0]),
-          shift_definition[:week][1],
-          service_id
-        )
-      end
+      shift_list = if weekend?(day.wday)
+                     create_weekend_shifts(
+                       Time.parse(shift_definition[:weekend][0]),
+                       shift_definition[:weekend][1],
+                       service_id
+                     )
+                   else
+                     create_week_shifts(
+                       Time.parse(shift_definition[:week][0]),
+                       shift_definition[:week][1],
+                       service_id
+                     )
+                   end
 
       Shift.import(shift_list)
     end
@@ -97,9 +97,29 @@ def create_engineers(service_id)
   Engineer.import(engineer_list)
 end
 
+def create_engineer_shifts(service_id, engineers)
+  engineer_shifts = []
+  engineers.each do |engineer|
+    Service.includes(:shifts).find(service_id).shifts.first(25).pluck(:id).each do |shift_id|
+      engineer_shifts << { engineer_id: engineer.id, shift_id: shift_id }
+    end
+  end
+
+  EngineerShift.import(engineer_shifts)
+end
+
 Service.all.each do |service|
+  print "\n"
+  p "In Service #{service.name}, id: #{service.id}"
+  p 'Creating Shifts'
   create_shifts(service.id)
+
+  p 'Creating Egnineers'
   create_engineers(service.id)
+
+  p 'Creating EngineerShifts'
+  create_engineer_shifts(service.id, service.engineers)
+  print "\n"
 end
 
 p 'Seeding successfull!'
