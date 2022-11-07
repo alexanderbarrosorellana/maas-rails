@@ -50,18 +50,18 @@ end
 @starting_week_day = @today.beginning_of_week
 @ending_week_day = (@today + 4.weeks).end_of_week
 
-def create_weekend_shifts(weekend_starting_hour, weekend_total_hours, service_id)
+def create_weekend_shifts(weekend_starting_hour, weekend_total_hours, service_id, date)
   weekend_shift_list = create_shift_list(weekend_starting_hour, weekend_total_hours)
 
   weekend_shift_list.map do |shift|
-    shift.merge({ service_id: service_id, date: @today })
+    shift.merge({ service_id: service_id, date: date })
   end
 end
 
-def create_week_shifts(week_starting_hour, week_total_hours, service_id)
+def create_week_shifts(week_starting_hour, week_total_hours, service_id, date)
   week_shift_list = create_shift_list(week_starting_hour, week_total_hours)
   week_shift_list.map do |shift|
-    shift.merge({ service_id: service_id, date: @today })
+    shift.merge({ service_id: service_id, date: date })
   end
 end
 
@@ -74,13 +74,15 @@ def create_shifts(service_id)
                      create_weekend_shifts(
                        Time.parse(shift_definition[:weekend][0]),
                        shift_definition[:weekend][1],
-                       service_id
+                       service_id,
+                       day
                      )
                    else
                      create_week_shifts(
                        Time.parse(shift_definition[:week][0]),
                        shift_definition[:week][1],
-                       service_id
+                       service_id,
+                       day
                      )
                    end
 
