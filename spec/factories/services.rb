@@ -1,5 +1,9 @@
+# frozen_string_literal: true
+
+require 'faker'
+
 FactoryBot.define do
   factory :service do
-    name { "MyString" }
+    name { Faker::Company.name }
   end
 end

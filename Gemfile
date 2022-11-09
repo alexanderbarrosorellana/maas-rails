@@ -36,6 +36,7 @@ gem 'bootsnap', require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 
+gem 'active_model_serializers'
 gem 'activerecord-import'
 
 group :development, :test do
@@ -53,4 +54,5 @@ end
 
 group :test do
   gem 'database_cleaner-active_record'
+  gem 'shoulda-matchers', '~> 5.0'
 end

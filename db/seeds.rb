@@ -68,8 +68,6 @@ end
 def create_shifts(service_id)
   @shifts_definitions.each do |shift_definition|
     (@starting_week_day..@ending_week_day).each do |day|
-      shift_list = []
-
       shift_list = if weekend?(day.wday)
                      create_weekend_shifts(
                        Time.parse(shift_definition[:weekend][0]),
