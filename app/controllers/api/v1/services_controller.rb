@@ -6,7 +6,7 @@ module Api
     class ServicesController < ApplicationController
       def index
         services = Service.all
-        parsed_date = Date.parse(params[:date])
+        parsed_date = Date.parse(params[:date]) if params[:date]
         render json: services, parsed_date: parsed_date
       end
 
