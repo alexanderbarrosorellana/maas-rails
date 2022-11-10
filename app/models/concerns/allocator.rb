@@ -21,26 +21,28 @@ module Allocator
 
       Shift.upsert_all(allocations, update_only: %i[engineer_id assigned])
     end
-  end
 
-  def create_week_shift_hash(week_shifts) # rubocop:disable Metrics/AbcSize
-    week_shift_hash = {}
-    week_shifts.includes(:engineer_shifts).each do |shift|
-      engineer_shifts = shift.engineer_shifts
-      next if engineer_shifts.size.zero?
-
-      shift_id = shift.id
-
-      engineer_ids = engineer_shifts.pluck(:engineer_id)
-
-      if week_shift_hash[shift.date] # rubocop:disable Style/ConditionalAssignment
-        week_shift_hash[shift.date] = week_shift_hash[shift.date].merge({ shift_id => engineer_ids })
-      else
-        week_shift_hash[shift.date] = { shift_id => engineer_ids }
+    def create_week_shift_hash(week_shifts) # rubocop:disable Metrics/AbcSize
+      week_shift_hash = {}
+      week_shifts.includes(:engineer_shifts).each do |shift|
+        engineer_shifts = shift.engineer_shifts
+        next if engineer_shifts.size.zero?
+  
+        shift_id = shift.id
+  
+        engineer_ids = engineer_shifts.pluck(:engineer_id)
+  
+        if week_shift_hash[shift.date] # rubocop:disable Style/ConditionalAssignment
+          week_shift_hash[shift.date] = week_shift_hash[shift.date].merge({ shift_id => engineer_ids })
+        else
+          week_shift_hash[shift.date] = { shift_id => engineer_ids }
+        end
       end
+      week_shift_hash
     end
-    week_shift_hash
   end
+
+  
 
   def run_sanity_check(week_shifts)
     shifts_to_update = []
