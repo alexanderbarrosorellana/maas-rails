@@ -1,24 +1,59 @@
-# README
+# Monitoring as a Service
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Backend to monitoring as a service, you can find the logic behind allocate shifts
+in the allocator concern which uses allocator service to run the assignations
 
-Things you may want to cover:
+## Installation
 
-* Ruby version
+### Clone the repository
 
-* System dependencies
+```shell
+git clone https://github.com/alexanderbarrosorellana/maas-rails.git
+cd project
+```
 
-* Configuration
+### Check ruby version
 
-* Database creation
+```shell
+ruby -v
+```
 
-* Database initialization
+Currently using ruby 3.0.0
 
-* How to run the test suite
+I recomend to install ruby with rvm
 
-* Services (job queues, cache servers, search engines, etc.)
+```shell
+rvm install ruby-3.0.0
+```
 
-* Deployment instructions
+## Database
 
-* ...
+Currently using postgres
+
+version: psql (PostgreSQL) 12.12
+
+### Install dependencies
+
+```shell
+bundle install
+```
+
+### Initialize the database
+
+```shell
+rails db:create
+rails db:migrate
+rails db:seed
+```
+
+### Running tests with Rspec
+
+```shell
+bundle exec rspec
+```
+
+## Serve
+
+```shell
+rails s
+```
